@@ -18,9 +18,29 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
    
    <?php 
-      $cs = Yii::app()->clientScript; 
-      $cs->registerCoreScript('jquery');
+   $cs = Yii::app()->clientScript;
+   $cs->scriptMap=array(
+      //'jquery.js'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js',
+      //'jquery.min.js'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js',
+      'jquery-ui.js'=> Yii::app()->request->baseUrl.'/js/jquery-ui/js/jquery-ui-1.9.0.custom.js',
+      'jquery-ui.min.js'=> Yii::app()->request->baseUrl.'/js/jquery-ui/js/jquery-ui-1.9.0.custom.min.js',
+      'jquery-ui.css'=>Yii::app()->request->baseUrl.'/js/jquery-ui/css/ui-lightness/jquery-ui-1.9.0.custom.css',
+      'jquery-ui.min.css'=>Yii::app()->request->baseUrl.'/js/jquery-ui/css/ui-lightness/jquery-ui-1.9.0.custom.min.css'
+   );
+   /*$cs = Yii::app()->getClientScript();
+   $cs->packages = array(
+       'jquery.ui'=>array(
+                'js'=>array(Yii::app()->request->baseUrl.'/js/jquery-ui/js/jquery-ui-1.9.0.custom.min.js'),
+                'css'=>array(Yii::app()->request->baseUrl.'/js/jquery-ui/css/ui-lightness/jquery-ui-1.9.0.custom.min.css'),
+                'depends'=>array('jquery'),
+        ),
+   );
+   $cs->registerCoreScript('jquery.ui');
+   */
+     
    ?>
+   
+   <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 </head>
 
 <body>
