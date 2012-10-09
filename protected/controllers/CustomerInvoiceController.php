@@ -31,7 +31,7 @@ class CustomerInvoiceController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','DiagonisticEntryForm'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,7 +43,32 @@ class CustomerInvoiceController extends Controller
 			),
 		);
 	}
+   
+   public function actionDiagonisticEntryForm()
+   {
+       $model=new DiagonisticEntryForm;
 
+       // uncomment the following code to enable ajax-based validation
+       /*
+       if(isset($_POST['ajax']) && $_POST['ajax']==='diagonistic-entry-form-DiagonisticEntryForm-form')
+       {
+           echo CActiveForm::validate($model);
+           Yii::app()->end();
+       }
+       */
+
+       if(isset($_POST['DiagonisticEntryForm']))
+       {
+           $model->attributes=$_POST['DiagonisticEntryForm'];
+           if($model->validate())
+           {
+               // form inputs are valid, do something here
+               return;
+           }
+       }
+       $this->render('DiagonisticEntryForm',array('model'=>$model));
+   }
+   
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
