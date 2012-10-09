@@ -1,0 +1,15 @@
+*.swp
+.buildpath
+.project
+.settings
+assets/*
+js/extJs/*
+protected/runtime/*
+protected/data/*.db
+protected/tests/report/*
+protected/commands/locks
+protected/commands/logs
+themes/classic/views/
+ad/**
+temp/*
+
