@@ -20,6 +20,9 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'category_name',
-		'parent_id',
+      array(
+            'label' =>'Parent Category',
+            'name'  =>'parentCategory.category_name'
+        ),
 	),
 )); ?>

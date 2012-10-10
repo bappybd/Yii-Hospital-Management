@@ -16,6 +16,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+      'application.helpers.*',
 	),
 
 	'modules'=>array(
@@ -53,13 +54,7 @@ return array(
 		),*/
 		// uncomment the following to use a MySQL database
 		
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=yii_hospital',
-			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
-			'charset' => 'utf8',
-		),
+		'db'=> require(dirname(__FILE__).'/db.php'),
 		
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
