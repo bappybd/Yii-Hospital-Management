@@ -17,9 +17,15 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'category_id'); ?>
-		<?php echo $form->textField($model,'category_id'); ?>
+		<?php 
+         $categories = TestHelper::getTestCategories(); 
+         $list       = CHtml::listData($categories, 'id', 'category_name');
+      ?>
+      <?php echo $form->dropDownList($model, 'category_id', $list, array('prompt' => '[Select category]')); ?>
 		<?php echo $form->error($model,'category_id'); ?>
 	</div>
+   
+   
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'refvalue'); ?>

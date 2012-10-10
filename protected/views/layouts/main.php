@@ -55,8 +55,13 @@
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
+				array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
+				array('label'=>'Tests', 'url'=>array('/test/index')),
+            array('label'=>'Test Category', 'url'=>array('/testCategory/index')),
+            /*array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
+                array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+            )),*/
+
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
