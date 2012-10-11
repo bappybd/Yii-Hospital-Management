@@ -7,6 +7,7 @@ class LookUpController extends Controller
       $categories           = array();
       
       $category             = array();
+      $category['id']       = 2;
       $category['label']    = "anders";
       $category['category'] = "Blood";
       

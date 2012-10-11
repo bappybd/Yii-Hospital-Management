@@ -58,8 +58,8 @@ class CustomerInvoiceController extends Controller
        */
 
        if(isset($_POST['DiagonisticEntryForm']))
-       {
-           $model->attributes=$_POST['DiagonisticEntryForm'];
+       {echo "<pre>";print_r($_POST['DiagonisticEntryForm']);echo "<pre/>";exit;
+           $model->attributes = $_POST['DiagonisticEntryForm'];
            if($model->validate())
            {
                // form inputs are valid, do something here

@@ -16,6 +16,7 @@ class DiagonisticEntryForm extends CFormModel
    public $original_refby;
    
    public $tests;
+   public $testsIds;
 
    /**
     * @return string the associated database table name
@@ -68,6 +69,7 @@ class DiagonisticEntryForm extends CFormModel
          'create_date'    => 'Create Date',
          'update_date'    => 'Update Date',
          'tests'          => 'Test Name',
+         'testsIds'       => 'Test Id',
       );
    }
 

@@ -46,7 +46,7 @@
      ];
      
      var cache = {};
-     $( "#search" ).catcomplete({
+     $( "#test_1" ).catcomplete({
          delay: 0,
          /*source: data*/
          source: function( request, response ) {
@@ -60,28 +60,12 @@
                  cache[ term ] = data;
                  response( data );
              });
+         },
+         select: function( event, ui ) {
+            var id = $(this).attr('testId');
+            console.log(ui);
+            $("#testId_"+id).val(ui.item.id);
          }
-         /*source: function( request, response ) {
-                $.ajax({
-                    url: "http://ws.geonames.org/searchJSON",
-                    dataType: "jsonp",
-                    data: {
-                        featureClass: "P",
-                        style: "full",
-                        maxRows: 12,
-                        name_startsWith: request.term
-                    },
-                    success: function( data ) {
-                        response( $.map( data.geonames, function( item ) {
-                            return {
-                                label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
-                                value: item.name
-                            }
-                        }));
-                    }
-                });
-            },*/
-         
      });
  });
  </script>
@@ -124,15 +108,14 @@
    <span id="testCloneSpan">
       <div class="row" id="cloneTest" testNo="1">
 	   	<?php echo $form->labelEx($model,'tests'); ?>
-	   	<?php echo $form->textField($model,'tests[]'); ?>
+	   	<?php echo $form->textField($model,'tests[]', array('id' => 'test_1', 'class' => 'testAutoComplete', 'testId' => '1')); ?>
+         <?php echo $form->hiddenField($model,'testsIds[]', array('id' => 'testId_1', 'class' => 'testHiddenField')); ?>
 	   	<?php echo $form->error($model,'tests'); ?>
 	   </div>
-      <label for="search">Search: </label>
-<input id="search" />
    </span>
    
    <div class="row addNew">
-      <?php echo CHtml::Button('Add Test', array('id' => 'addNewTestButton')); ?>
+      <?php echo CHtml::Button('Add another test', array('id' => 'addNewTestButton')); ?>
    </div>
    
 	<div class="row buttons">
@@ -145,8 +128,38 @@
 
 <script type="text/javascript">
    var lastTestCloneNo = 1;
+   var cache = {};
    $("#addNewTestButton").live('click',function(){
       var testCloneDiv = $("#cloneTest").clone();
+      var newTestCloneNo = lastTestCloneNo + 1;
+      
+      var newLabel   = $(testCloneDiv).children('label');
+      var newInput   = $(testCloneDiv).children('input.testAutoComplete');
+      var newInputId = $(testCloneDiv).children('input.testHiddenField');
+      
+      newInput.val('');
+      newInput.attr('id', 'test_'+newTestCloneNo);
+      newInput.attr('testId', newTestCloneNo);
+      newLabel.html('Test Name '+newTestCloneNo);
+            
+      newInput.catcomplete({
+         delay: 0,
+         /*source: data*/
+         source: function( request, response ) {
+             var term = request.term;
+             if ( term in cache ) {
+                 response( cache[ term ] );
+                 return;
+             }
+
+             $.getJSON( "<?php echo $this->createUrl('/lookUp/getTests')?>", request, function( data, status, xhr ) {
+                 cache[ term ] = data;
+                 response( data );
+             });
+         }
+     });
+      
       $("#testCloneSpan").append(testCloneDiv);
+      lastTestCloneNo = newTestCloneNo;
    });
 </script>
