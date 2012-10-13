@@ -12,4 +12,4 @@ protected/commands/logs
 themes/classic/views/
 ad/**
 temp/*
-
+protected/config/db.php
