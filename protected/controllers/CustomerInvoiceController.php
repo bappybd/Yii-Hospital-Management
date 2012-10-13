@@ -3,6 +3,7 @@
 class CustomerInvoiceController extends Controller
 {
    const DIAGNOSTIC_FORM_CREATE_SUCCESS_MSG = 'Diagnostic form created successfully.';
+   const INVALID_INVOICE_MEMO_MSG           = 'Invalid invoice memo.';
 
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -33,7 +34,7 @@ class CustomerInvoiceController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','DiagonisticEntryForm'),
+				'actions'=>array('create','update','DiagonisticEntryForm', 'InvoiceMemo'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -120,7 +121,7 @@ class CustomerInvoiceController extends Controller
                  }
                  
                  Yii::app()->user->setFlash('success', self::DIAGNOSTIC_FORM_CREATE_SUCCESS_MSG);
-                 $this->redirect($this->createUrl('/invoiceCashMemno'));
+                 $this->redirect($this->createUrl('/customerInvoice/invoiceMemo', array('id' => $customerInvoiceModel->id)));
                  
                  return;
                  
@@ -135,6 +136,28 @@ class CustomerInvoiceController extends Controller
       }
       
       $this->render('DiagonisticEntryForm', array('model' => $model));
+   }
+   
+   public function actionInvoiceMemo()
+{     $model = PatientTracker::model()->with('test')->findByPk(1);
+
+      $id           = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+      
+      $invoiceModel = CustomerInvoice::model()->with(array('orginalReferer', 
+                                                           'patientTracker.test'))
+                                              ->findByPk($id);
+      if($invoiceModel === null)
+      { 
+         Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
+         $this->redirect($this->createUrl('/customerInvoice/index'));
+         Yii::app()->end();
+      }
+      
+      $formModel             = new InvoiceMemoForm();      
+      $formModel->attributes = $invoiceModel->attributes;
+      
+      
+      $this->render('InvoiceMemoForm', array('model' => $formModel, 'invoiceModel' => $invoiceModel));
    }
    
 	/**

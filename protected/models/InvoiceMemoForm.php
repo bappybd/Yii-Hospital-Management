@@ -1,36 +1,32 @@
 <?php
 
 /**
- * This is the model class for table "customer_invoice".
+ * This is the form model class for table "customer_invoice".
  *
  * The followings are the available columns in table 'customer_invoice':
- * @property integer $id
- * @property string $patient_id
- * @property string $name
- * @property integer $age
- * @property string $sex
- * @property string $mobile
- * @property integer $refby
- * @property integer $original_refby
- * @property double $subtotal
- * @property double $less_discount
- * @property double $netpay
- * @property double $recieved
- * @property double $due
- * @property string $create_date
- * @property string $update_date
  */
-class CustomerInvoice extends CActiveRecord
+class InvoiceMemoForm extends CFormModel
 {
-   /**
-    * Returns the static model of the specified AR class.
-    * @param string $className active record class name.
-    * @return CustomerInvoice the static model class
-    */
-   public static function model($className=__CLASS__)
-   {
-      return parent::model($className);
-   }
+   public $id;
+   public $patient_id;
+   public $name;
+   public $age;
+   public $sex;
+   public $mobile;
+   public $refby;
+   public $original_refby;
+   //not required for form fields
+   public $netpay;
+   public $subtotal;
+   public $less_discount;
+   public $recieved;
+   public $due;
+   public $create_date;
+   public $update_date;
+   //end not required
+   
+   public $tests;
+   public $testsIds;
 
    /**
     * @return string the associated database table name
@@ -48,7 +44,7 @@ class CustomerInvoice extends CActiveRecord
       // NOTE: you should only define rules for those attributes that
       // will receive user inputs.
       return array(
-         array('patient_id, name, age, sex, netpay', 'required'),
+         array('name, age, sex', 'required'),
          array('age, refby, original_refby', 'numerical', 'integerOnly'=>true),
          array('subtotal, less_discount, netpay, recieved, due', 'numerical'),
          array('patient_id, name', 'length', 'max'=>255),
@@ -62,40 +58,28 @@ class CustomerInvoice extends CActiveRecord
    }
 
    /**
-    * @return array relational rules.
-    */
-   public function relations()
-   {
-      // NOTE: you may need to adjust the relation name and the related
-      // class name for the relations automatically generated below.
-      return array(
-         'patientTracker'=> array(self::HAS_MANY,  'PatientTracker', '', 'on' => 't.patient_id = patientTracker.patient_id'),
-         'referer' => array(self::BELONGS_TO,  'OriginalRefBy', 'refby'),
-         'orginalReferer' => array(self::BELONGS_TO,  'OriginalRefBy', 'original_refby'),
-      );
-   }
-
-   /**
     * @return array customized attribute labels (name=>label)
     */
    public function attributeLabels()
    {
       return array(
-         'id' => 'ID',
-         'patient_id' => 'Patient',
-         'name' => 'Name',
-         'age' => 'Age',
-         'sex' => 'Sex',
-         'mobile' => 'Mobile',
-         'refby' => 'Refby',
-         'original_refby' => 'Original Refby',
-         'subtotal' => 'Subtotal',
-         'less_discount' => 'Less Discount',
-         'netpay' => 'Netpay',
-         'recieved' => 'Recieved',
-         'due' => 'Due',
-         'create_date' => 'Create Date',
-         'update_date' => 'Update Date',
+         'id'             => 'ID',
+         'patient_id'     => 'Patient ID',
+         'name'           => 'Patient Name',
+         'age'            => 'Age',
+         'sex'            => 'Sex',
+         'mobile'         => 'Mob',
+         'refby'          => 'Ref. by',
+         'original_refby' => 'Original Ref. by',
+         'subtotal'       => 'Subtotal',
+         'less_discount'  => 'Less Discount',
+         'netpay'         => 'Netpay',
+         'recieved'       => 'Recieved',
+         'due'            => 'Due',
+         'create_date'    => 'Create Date',
+         'update_date'    => 'Update Date',
+         'tests'          => 'Test/Investigation Name',
+         'testsIds'       => 'Test Id',
       );
    }
 

@@ -1,6 +1,6 @@
 <?php
 class DiagnosticHelper extends CApplicationComponent{
-   public function getMaxPatientId(){
+   public static function getMaxPatientId(){
       $model            = new CustomerInvoice;
       $criteria         = new CDbCriteria;
       $criteria->select = 'max(id) AS id';
@@ -10,7 +10,7 @@ class DiagnosticHelper extends CApplicationComponent{
       return $maxColumn;
    }
 
-   public function generatePatientId($params = array()){
+   public static function generatePatientId($params = array()){
       $patiendId = "";
       
       $maxId = self::getMaxPatientId();
@@ -25,7 +25,7 @@ class DiagnosticHelper extends CApplicationComponent{
       return $patiendId;
    }
    
-   public function removeDiagnosticTests($patientId, $customerInvoiceId = 0){
+   public static function removeDiagnosticTests($patientId, $customerInvoiceId = 0){
       $patientId = trim($patientId);
       
       if(!empty($patientId) ){

@@ -138,3 +138,25 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `firstname`, `lastname`, `create_date`) VALUES
 (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin@localhost.com', 'Clark', 'Kent', '2012-10-10 11:28:57');
+
+--
+-- Table structure for table `original_ref_by`
+--
+
+CREATE TABLE IF NOT EXISTS `original_ref_by` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `deg` varchar(255) NOT NULL,
+  `hospital_name` varchar(255) NOT NULL,
+  `mob` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `pic` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `original_ref_by`
+--
+
+INSERT INTO `original_ref_by` (`id`, `name`, `deg`, `hospital_name`, `mob`, `email`, `pic`) VALUES
+(1, 'Shakil Ahmed', 'M.B.B.S', 'SQUAR HOSPITAL', '017465487', 'shakil@hotpital.com', '');
