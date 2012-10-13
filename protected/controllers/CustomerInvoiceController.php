@@ -2,6 +2,8 @@
 
 class CustomerInvoiceController extends Controller
 {
+   const DIAGNOSTIC_FORM_CREATE_SUCCESS_MSG = 'Diagnostic form created successfully.';
+
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -46,27 +48,93 @@ class CustomerInvoiceController extends Controller
    
    public function actionDiagonisticEntryForm()
    {
-       $model=new DiagonisticEntryForm;
-
-       // uncomment the following code to enable ajax-based validation
-       /*
-       if(isset($_POST['ajax']) && $_POST['ajax']==='diagonistic-entry-form-DiagonisticEntryForm-form')
-       {
-           echo CActiveForm::validate($model);
-           Yii::app()->end();
-       }
-       */
-
-       if(isset($_POST['DiagonisticEntryForm']))
-       {echo "<pre>";print_r($_POST['DiagonisticEntryForm']);echo "<pre/>";exit;
-           $model->attributes = $_POST['DiagonisticEntryForm'];
-           if($model->validate())
-           {
-               // form inputs are valid, do something here
-               return;
-           }
-       }
-       $this->render('DiagonisticEntryForm',array('model'=>$model));
+      $isNewRecrod          = true;
+      $id                   = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+      $model                = new DiagonisticEntryForm;
+      $customerInvoiceModel = new CustomerInvoice();
+      
+      try{
+         if($id){
+            $customerInvoiceModel = CustomerInvoice::model()->findByPk($id);
+            if($customerInvoiceModel !== null){
+               $model->attributes = $customerInvoiceModel->attributes;
+               $isNewRecrod       = false;
+               
+            }
+         }
+         
+         // uncomment the following code to enable ajax-based validation
+         /*
+         if(isset($_POST['ajax']) && $_POST['ajax']==='diagonistic-entry-form-DiagonisticEntryForm-form')
+         {
+             echo CActiveForm::validate($model);
+             Yii::app()->end();
+         }
+         */
+         
+         if(isset($_POST['DiagonisticEntryForm']))
+         {   
+            $postData          = $_POST['DiagonisticEntryForm'];
+            $model->attributes = $postData;
+            
+             $model->attributes = $_POST['DiagonisticEntryForm'];
+             if($model->validate())
+             {
+                 if($id){
+                    $customerInvoiceModel = CustomerInvoice::model()->findByPk($id);
+                 }   
+                 if($customerInvoiceModel === null){
+                    $customerInvoiceModel = new CustomerInvoice();
+                 }
+                 
+                 $customerInvoiceModel->attributes = $model->attributes;
+                 if(empty($customerInvoiceModel->patient_id)){
+                    $customerInvoiceModel->patient_id = DiagnosticHelper::generatePatientId();   
+                 }
+                 
+                 if($isNewRecrod){
+                    $customerInvoiceModel->create_date = new CDbExpression('NOW()');
+                 }
+                 $customerInvoiceModel->update_date = new CDbExpression('NOW()');
+                 $customerInvoiceModel->save(false);
+                 
+                 //saving tests
+                 $tests       = $postData['tests'];
+                 $testsIds    = $postData['testsIds'];
+                 $formTestIds = array();
+                 if(count($tests)){
+                    //remove the existing invoice tests first
+                    DiagnosticHelper::removeDiagnosticTests($customerInvoiceModel->patient_id);
+                    
+                    //insert the new tests
+                    foreach($tests as $key => $thisTest){
+                       if(!empty($thisTest) && isset($testsIds[$key])){
+                         $formTestIds[] = $testsIds[$key];
+                         $patientTrackerModel = new PatientTracker();
+                         $patientTrackerModel->patient_id = $customerInvoiceModel->patient_id;
+                         $patientTrackerModel->test_id    = $testsIds[$key];
+                         //$patientTrackerModel->invoice_id = $customerInvoiceModel->id;
+                         $patientTrackerModel->save(false);
+                      }  
+                   }
+                 }
+                 
+                 Yii::app()->user->setFlash('success', self::DIAGNOSTIC_FORM_CREATE_SUCCESS_MSG);
+                 $this->redirect($this->createUrl('/invoiceCashMemno'));
+                 
+                 return;
+                 
+             }
+             else
+             {
+                //echo $model->getError();exit;
+             }
+         }
+      }catch(Exception $e){
+         echo $e->getMessage();exit;
+      }
+      
+      $this->render('DiagonisticEntryForm', array('model' => $model));
    }
    
 	/**

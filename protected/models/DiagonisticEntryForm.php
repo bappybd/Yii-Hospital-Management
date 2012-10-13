@@ -7,6 +7,7 @@
  */
 class DiagonisticEntryForm extends CFormModel
 {
+   public $id;
    public $patient_id;
    public $name;
    public $age;
@@ -14,6 +15,15 @@ class DiagonisticEntryForm extends CFormModel
    public $mobile;
    public $refby;
    public $original_refby;
+   //not required for form fields
+   public $netpay;
+   public $subtotal;
+   public $less_discount;
+   public $recieved;
+   public $due;
+   public $create_date;
+   public $update_date;
+   //end not required
    
    public $tests;
    public $testsIds;
@@ -34,7 +44,7 @@ class DiagonisticEntryForm extends CFormModel
       // NOTE: you should only define rules for those attributes that
       // will receive user inputs.
       return array(
-         array('name, age, sex, netpay', 'required'),
+         array('name, age, sex', 'required'),
          array('age, refby, original_refby', 'numerical', 'integerOnly'=>true),
          array('subtotal, less_discount, netpay, recieved, due', 'numerical'),
          array('patient_id, name', 'length', 'max'=>255),
