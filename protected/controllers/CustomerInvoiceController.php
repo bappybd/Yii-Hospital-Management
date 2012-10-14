@@ -186,6 +186,10 @@ class CustomerInvoiceController extends Controller
 	 */
 	public function actionView($id)
 	{
+      //redirect to Invoice Memo for now
+      $this->redirect($this->createUrl('/customerInvoice/invoiceMemo', array('id' => $id)));
+      Yii::app()->end();
+      
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
