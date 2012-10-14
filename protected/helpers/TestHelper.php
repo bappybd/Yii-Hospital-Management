@@ -1,6 +1,6 @@
 <?php
 class TestHelper extends CApplicationComponent{
-   public function getTestCategories($parent = false, $catId = null){
+   public static function getTestCategories($parent = false, $catId = null){
       $categories = array();
       
       //condition

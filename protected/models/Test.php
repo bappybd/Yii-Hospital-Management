@@ -58,6 +58,7 @@ class Test extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+         'testCategory' => array(self::BELONGS_TO, 'TestCategory', 'category_id')
 		);
 	}
 
@@ -86,16 +87,18 @@ class Test extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-
+      $criteria->with = array('testCategory');   
+      
 		$criteria->compare('id',$this->id);
 		$criteria->compare('test_name',$this->test_name,true);
-		$criteria->compare('category_id',$this->category_id);
+		//$criteria->compare('category_id',$this->category_id);
+      //$criteria->compare('testCategory.category_name', $this->category_id);
 		$criteria->compare('refvalue',$this->refvalue);
 		$criteria->compare('test_amount',$this->test_amount);
 		$criteria->compare('test_room',$this->test_room,true);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria'=>$criteria
 		));
 	}
 }

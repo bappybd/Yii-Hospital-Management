@@ -138,16 +138,16 @@ class CustomerInvoiceController extends Controller
       $this->render('DiagonisticEntryForm', array('model' => $model));
    }
    
-   public function actionInvoiceMemo()
-{     $model = PatientTracker::model()->with('test')->findByPk(1);
+   public function actionInvoiceMemo() {
+
+     $model = PatientTracker::model()->with('test')->findByPk(1);
 
       $id           = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
       
       $invoiceModel = CustomerInvoice::model()->with(array('orginalReferer', 
                                                            'patientTracker.test'))
                                               ->findByPk($id);
-      if($invoiceModel === null)
-      { 
+      if($invoiceModel === null) { 
          Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
          $this->redirect($this->createUrl('/customerInvoice/index'));
          Yii::app()->end();
@@ -156,6 +156,26 @@ class CustomerInvoiceController extends Controller
       $formModel             = new InvoiceMemoForm();      
       $formModel->attributes = $invoiceModel->attributes;
       
+      if(isset($_POST['InvoiceMemoForm'])) {   
+         $postData              = $_POST['InvoiceMemoForm'];
+         $formModel->attributes = $postData;
+
+         //assing selective post values
+         $invoiceModel->refby          = $postData['refby'];
+         $invoiceModel->original_refby = $postData['original_refby'];
+         
+         $invoiceModel->subtotal       = $postData['subtotal'];
+         $invoiceModel->less_discount  = $postData['less_discount'];
+         $invoiceModel->netpay         = $postData['netpay'];
+         $invoiceModel->recieved       = $postData['recieved'];
+         $invoiceModel->due            = $postData['due'];
+         $invoiceModel->save(false);
+         
+         Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
+         $this->redirect($this->createUrl('/customerInvoice/InvoiceMemo', array('id' => $invoiceModel->id)));
+            //echo "<pre>";print_r($postData);echo "<pre/>";exit;
+      
+      }
       
       $this->render('InvoiceMemoForm', array('model' => $formModel, 'invoiceModel' => $invoiceModel));
    }
@@ -226,6 +246,10 @@ class CustomerInvoiceController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+      //redirect to Invoice Memo for now
+      $this->redirect($this->createUrl('/customerInvoice/invoiceMemo', array('id' => $id)));
+      Yii::app()->end();
+      
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed

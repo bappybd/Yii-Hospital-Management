@@ -63,8 +63,8 @@
          },
          select: function( event, ui ) {
             var id = $(this).attr('testId');
-            console.log(ui);
             $("#testId_"+id).val(ui.item.id);
+            $(this).siblings('span.testRoomSpan').html(ui.item.roomno);
          }
      });
  });
@@ -114,7 +114,7 @@
          <?php echo $form->labelEx($model,'tests'); ?>
          <?php echo $form->textField($model,'tests[]', array('id' => 'test_1', 'class' => 'testAutoComplete', 'testId' => '1')); ?>
          <?php echo $form->hiddenField($model,'testsIds[]', array('id' => 'testId_1', 'class' => 'testHiddenField')); ?>
-         <?php echo $form->error($model,'tests'); ?>
+         &nbsp;&nbsp;<strong>Room NO:</strong> <span id="roomNoSpan_1" class="testRoomSpan"></span>
       </div>
    </span>
    
@@ -137,9 +137,12 @@
       var testCloneDiv = $("#cloneTest").clone();
       var newTestCloneNo = lastTestCloneNo + 1;
       
-      var newLabel   = $(testCloneDiv).children('label');
-      var newInput   = $(testCloneDiv).children('input.testAutoComplete');
-      var newInputId = $(testCloneDiv).children('input.testHiddenField');
+      var newLabel    = $(testCloneDiv).children('label');
+      var newInput    = $(testCloneDiv).children('input.testAutoComplete');
+      var newInputId  = $(testCloneDiv).children('input.testHiddenField');
+      var newRoomSpan = $(testCloneDiv).children('span.testRoomSpan');
+      newRoomSpan.html('');
+      newRoomSpan.attr('id', 'roomNoSpan_'+newTestCloneNo);
       
       newInput.val('');
       newInput.attr('id', 'test_'+newTestCloneNo);
