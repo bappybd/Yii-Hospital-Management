@@ -27,6 +27,8 @@ class InvoiceMemoForm extends CFormModel
    
    public $tests;
    public $testsIds;
+   public $refby_name;
+   public $original_refby_name;
 
    /**
     * @return string the associated database table name
@@ -63,23 +65,25 @@ class InvoiceMemoForm extends CFormModel
    public function attributeLabels()
    {
       return array(
-         'id'             => 'ID',
-         'patient_id'     => 'Patient ID',
-         'name'           => 'Patient Name',
-         'age'            => 'Age',
-         'sex'            => 'Sex',
-         'mobile'         => 'Mob',
-         'refby'          => 'Ref. by',
-         'original_refby' => 'Original Ref. by',
-         'subtotal'       => 'Subtotal',
-         'less_discount'  => 'Less Discount',
-         'netpay'         => 'Netpay',
-         'recieved'       => 'Recieved',
-         'due'            => 'Due',
-         'create_date'    => 'Create Date',
-         'update_date'    => 'Update Date',
-         'tests'          => 'Test/Investigation Name',
-         'testsIds'       => 'Test Id',
+         'id'                  => 'ID',
+         'patient_id'          => 'Patient ID',
+         'name'                => 'Patient Name',
+         'age'                 => 'Age',
+         'sex'                 => 'Sex',
+         'mobile'              => 'Mob',
+         'refby'               => 'Ref. by',
+         'original_refby'      => 'Original Ref. by',
+         'subtotal'            => 'Subtotal',
+         'less_discount'       => 'Less Discount',
+         'netpay'              => 'Netpay',
+         'recieved'            => 'Recieved',
+         'due'                 => 'Due',
+         'create_date'         => 'Create Date',
+         'update_date'         => 'Update Date',
+         'tests'               => 'Test/Investigation Name',
+         'testsIds'            => 'Test Id',
+         'refby_name'          => 'Ref. by',
+         'original_refby_name' => 'Original Ref. by'
       );
    }
 

@@ -36,7 +36,54 @@
          <td><?php echo $model->getAttributeLabel('mobile'); ?>: <?php echo $form->textField($model, 'mobile'); ?></td>
       </tr>
       <tr>
-         <td colspan=3><?php echo $model->getAttributeLabel('refby'); ?>: <?php echo $invoiceModel->orginalReferer->name; ?></td>
+         <td colspan=3>
+            <?php echo $model->getAttributeLabel('refby_name'); ?>: <?php echo isset($invoiceModel->referer) ? $invoiceModel->referer->name : ""; ?>
+            <?php
+            $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                          'name'=>'refby',
+                          'value' => isset($invoiceModel->referer) ? $invoiceModel->referer->name : "",
+                          'source'=>$this->createUrl('/lookUp/getReferer'),// <- path to controller which returns dynamic data
+                          // additional javascript options for the autocomplete plugin
+                          'options'=>array(
+                             'minLength'=>'1', // min chars to start search
+                             'select'=>'js:function(event, ui) { 
+                                $("#InvoiceMemoForm_refby").val(ui.item.id);
+                              }'
+                          ),
+                          'htmlOptions'=>array(
+                             'id'=>'refby_name',
+                             'rel'=>'val',
+                             'style' => 'width: 315px'
+                          ),
+                  ));
+            ?>
+            <?php echo $form->hiddenField($model, 'refby'); ?>
+            </td>
+      </tr>
+      <tr>
+         <td colspan=3>
+            <?php echo $model->getAttributeLabel('original_refby_name'); ?>: <?php echo isset($invoiceModel->orginalReferer) ? $invoiceModel->orginalReferer->name : ""; ?>
+            <?php
+            $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                          'name'=>'original_refby',
+                          'value' => isset($invoiceModel->orginalReferer) ? $invoiceModel->orginalReferer->name : "",
+                          'source'=>$this->createUrl('/lookUp/getReferer'),// <- path to controller which returns dynamic data
+                          // additional javascript options for the autocomplete plugin
+                          'options'=>array(
+                             'minLength'=>'1', // min chars to start search
+                             'select'=>'js:function(event, ui) { 
+                                $("#InvoiceMemoForm_original_refby").val(ui.item.id);
+                              }'
+                          ),
+                          'htmlOptions'=>array(
+                             'id'=>'original_refby_name',
+                             'rel'=>'val',
+                             'style' => 'width: 315px'
+                          ),
+                  ));
+            ?>
+            <?php echo $form->hiddenField($model, 'original_refby'); ?>
+            </td>
       </tr>
       <tr>
          <td colspan=3 align="center">&nbsp;</td>

@@ -138,16 +138,16 @@ class CustomerInvoiceController extends Controller
       $this->render('DiagonisticEntryForm', array('model' => $model));
    }
    
-   public function actionInvoiceMemo()
-{     $model = PatientTracker::model()->with('test')->findByPk(1);
+   public function actionInvoiceMemo() {
+
+     $model = PatientTracker::model()->with('test')->findByPk(1);
 
       $id           = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
       
       $invoiceModel = CustomerInvoice::model()->with(array('orginalReferer', 
                                                            'patientTracker.test'))
                                               ->findByPk($id);
-      if($invoiceModel === null)
-      { 
+      if($invoiceModel === null) { 
          Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
          $this->redirect($this->createUrl('/customerInvoice/index'));
          Yii::app()->end();
@@ -155,6 +155,13 @@ class CustomerInvoiceController extends Controller
       
       $formModel             = new InvoiceMemoForm();      
       $formModel->attributes = $invoiceModel->attributes;
+      
+      if(isset($_POST['InvoiceMemoForm'])) {   
+         $postData              = $_POST['InvoiceMemoForm'];
+         $formModel->attributes = $postData;
+         
+         echo "<pre>";print_r($postData);echo "<pre/>";exit;
+      }
       
       
       $this->render('InvoiceMemoForm', array('model' => $formModel, 'invoiceModel' => $invoiceModel));
