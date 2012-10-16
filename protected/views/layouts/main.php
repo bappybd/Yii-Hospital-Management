@@ -59,6 +59,7 @@
             array('label'=>'Invoice Memo List', 'url'=>array('/customerInvoice/admin')),
 				array('label'=>'Tests', 'url'=>array('/test/admin')),
             array('label'=>'Test Category', 'url'=>array('/testCategory/admin')),
+            array('label'=>'Original Referer', 'url'=>array('/originalRefBy/admin')),
             /*array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
                 array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
             )),*/
