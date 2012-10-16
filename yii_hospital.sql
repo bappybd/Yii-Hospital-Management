@@ -190,3 +190,9 @@ CREATE TABLE IF NOT EXISTS `original_ref_by` (
 
 INSERT INTO `original_ref_by` (`id`, `name`, `deg`, `hospital_name`, `mob`, `email`, `pic`) VALUES
 (1, 'Shakil Ahmed', 'M.B.B.S', 'SQUAR HOSPITAL', '017465487', 'shakil@hotpital.com', '');
+
+---
+--- Changes SQL
+---
+
+---ALTER TABLE `customer_invoice` CHANGE `refby` `refby` VARCHAR( 255 ) NOT NULL 

@@ -47,9 +47,9 @@ class InvoiceMemoForm extends CFormModel
       // will receive user inputs.
       return array(
          array('name, age, sex', 'required'),
-         array('age, refby, original_refby', 'numerical', 'integerOnly'=>true),
+         array('age, original_refby', 'numerical', 'integerOnly'=>true),
          array('subtotal, less_discount, netpay, recieved, due', 'numerical'),
-         array('patient_id, name', 'length', 'max'=>255),
+         array('patient_id, refby, name', 'length', 'max'=>255),
          array('sex', 'length', 'max'=>6),
          array('mobile', 'length', 'max'=>128),
          array('create_date, update_date', 'safe'),
