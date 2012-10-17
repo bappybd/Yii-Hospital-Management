@@ -41,6 +41,10 @@
    ?>
    
    <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
+   
+   <script type="text/javascript">
+   var siteUrl = "<?php echo $this->createAbsoluteUrl('/') ?>";
+   </script>
 </head>
 
 <body>
@@ -57,6 +61,7 @@
 				array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
             array('label'=>'Invoice Memo List', 'url'=>array('/customerInvoice/admin')),
+            array('label'=>'Active Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker')),
 				array('label'=>'Tests', 'url'=>array('/test/admin')),
             array('label'=>'Test Category', 'url'=>array('/testCategory/admin')),
             array('label'=>'Original Referer', 'url'=>array('/originalRefBy/admin')),
@@ -74,7 +79,11 @@
 			'links'=>$this->breadcrumbs,
 		)); ?><!-- breadcrumbs -->
 	<?php endif?>
-
+   
+   <!-- show flash message -->
+   <?php $this->renderPartial('/site/flash_message') ?>
+   
+   <!-- show site content -->
 	<?php echo $content; ?>
 
 	<div class="clear"></div>

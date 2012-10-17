@@ -65,4 +65,34 @@ class LookUpController extends Controller
       Yii::app()->end();
    }
    
+   public function actionGetPatientIDs() {
+      $list           = array();
+      $term           = isset($_REQUEST['term']) ? trim($_REQUEST['term']) : "";
+      $term           = addcslashes($term, '%_'); // escape LIKE's special characters
+   
+      $criteria = new CDbCriteria();
+      $params   = array();
+      if(!empty($term)){
+        $criteria->condition =   "t.patient_id LIKE :term" ;
+        $params[':term'] = "%$term%";
+      }
+      
+      $criteria->params = $params;
+      $criteria->offset = 0;
+      $criteria->limit  = 50;
+      $criteria->order  = "patient_id ASC";
+      $referers         = CustomerInvoice::model()->findAll($criteria);
+
+      foreach($referers as $test){
+         $item             = array();
+         $item['id']       = $test->patient_id;
+         $item['value']    = $test->patient_id;
+         
+         $list[] = $item;
+      }
+      
+      echo json_encode($list);
+      Yii::app()->end();
+   }
+   
 }
