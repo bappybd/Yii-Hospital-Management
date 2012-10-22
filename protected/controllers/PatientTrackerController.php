@@ -28,15 +28,36 @@ class PatientTrackerController extends Controller
       $this->render('activePatientTracker');
    }
 
-   public function actionReportPublishTracker()
+   public function actionPublishReport()
    {
-      $this->render('reportPublishTracker');
+      $this->render('PublishReport');
    }
    
+   public function actionReportDetails(){
+      if($_POST){
+         echo "<pre>";print_r($_POST);echo "</pre>";
+         $patientId     = isset($_REQUEST['patientId'])  ? trim($_REQUEST['patientId'])  : "";
+         $trackerIds    = isset($_REQUEST['publishReports']) ? $_REQUEST['publishReports'] : "";
+         
+         $criteria = new CDbCriteria();
+         if(count($trackerIds) && !empty($patientId)){
+            echo $criteria->condition ="t.patient_id = '$patientId' AND patientTracker.id IN (".implode(",", $trackerIds).")";
+         }
+         
+         
+         
+         $invoiceModel = CustomerInvoice::model()->with(array('orginalReferer', 
+                                                           'patientTracker.test'))
+                                              ->find($criteria);
+         echo "<pre>";print_r($invoiceModel->attributes);echo "</pre>";exit;
+         $this->render('reportDetails', array('model' => $invoiceModel));
+      }
+   }
    public function actionLoadPatientTests(){
       $patientId  = isset($_REQUEST['patientId'])  ? $_REQUEST['patientId']  : "";
       $testroomNo = isset($_REQUEST['testroomNo']) ? $_REQUEST['testroomNo'] : "";
-      $params     = array('patientId' => $patientId, 'testroomNo' => $testroomNo);
+      $actionType = isset($_REQUEST['type'])       ? $_REQUEST['type'] : "";
+      $params     = array('patientId' => $patientId, 'testroomNo' => $testroomNo, 'actionType' => $actionType);
       
       
       //load the tests

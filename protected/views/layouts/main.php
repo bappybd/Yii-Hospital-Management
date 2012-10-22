@@ -60,13 +60,15 @@
 			'items'=>array(
 				array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
-            array('label'=>'Invoice Memo List', 'url'=>array('/customerInvoice/admin')),
+            array('label'=>'Invoice Memo', 'url'=>array('/customerInvoice/admin')),
             array('label'=>'Active Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker')),
+            array('label'=>'ReportPublishTracker', 'url'=>array('/PatientTracker/PublishReport')),
 				array('label'=>'Tests', 'url'=>array('/test/admin')),
             array('label'=>'Test Category', 'url'=>array('/testCategory/admin')),
-            array('label'=>'Original Referer', 'url'=>array('/originalRefBy/admin')),
+            array('label'=>'Referer', 'url'=>array('/originalRefBy/admin')),
             /*array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
-                array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+               array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+               array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
             )),*/
 
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),

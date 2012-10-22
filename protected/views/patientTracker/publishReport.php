@@ -3,10 +3,10 @@
 
 $this->breadcrumbs=array(
 	'Patient Tracker'=>array('/patientTracker'),
-	'Active Patient Tracker',
+	'Report Publish Tracker',
 );
 ?>
-<h1>Active Patient Tracker</h1>
+<h1>Report Publish Tracker</h1>
 
 <div class="form">
   <div class="row">
@@ -59,7 +59,6 @@ function loadTests(){
      data: {
         patientId  : patientID,
         testroomNo : roomNo,
-        type       : update
      },
      success: function(response){
         $("#testSpan").html(response);
