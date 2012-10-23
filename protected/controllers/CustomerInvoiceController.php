@@ -3,6 +3,7 @@
 class CustomerInvoiceController extends Controller
 {
    const DIAGNOSTIC_FORM_CREATE_SUCCESS_MSG = 'Diagnostic form created successfully.';
+   const INVOICE_MEMO_SUCCESS_MSG           = 'Invoice memo saved successfully.';
    const INVALID_INVOICE_MEMO_MSG           = 'Invalid invoice memo.';
 
 	/**
@@ -77,8 +78,7 @@ class CustomerInvoiceController extends Controller
          {   
             $postData          = $_POST['DiagonisticEntryForm'];
             $model->attributes = $postData;
-            
-             $model->attributes = $_POST['DiagonisticEntryForm'];
+
              if($model->validate())
              {
                  if($id){
@@ -140,13 +140,13 @@ class CustomerInvoiceController extends Controller
    
    public function actionInvoiceMemo() {
 
-     $model = PatientTracker::model()->with('test')->findByPk(1);
-
       $id           = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+      
       
       $invoiceModel = CustomerInvoice::model()->with(array('orginalReferer', 
                                                            'patientTracker.test'))
                                               ->findByPk($id);
+
       if($invoiceModel === null) { 
          Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
          $this->redirect($this->createUrl('/customerInvoice/index'));
@@ -155,7 +155,7 @@ class CustomerInvoiceController extends Controller
       
       $formModel             = new InvoiceMemoForm();      
       $formModel->attributes = $invoiceModel->attributes;
-      
+
       if(isset($_POST['InvoiceMemoForm'])) {   
          $postData              = $_POST['InvoiceMemoForm'];
          $formModel->attributes = $postData;
@@ -170,8 +170,8 @@ class CustomerInvoiceController extends Controller
          $invoiceModel->recieved       = $postData['recieved'];
          $invoiceModel->due            = $postData['due'];
          $invoiceModel->save(false);
-         
-         Yii::app()->user->setFlash('error', self::INVALID_INVOICE_MEMO_MSG);
+
+         Yii::app()->user->setFlash('success', self::INVOICE_MEMO_SUCCESS_MSG);
          $this->redirect($this->createUrl('/customerInvoice/InvoiceMemo', array('id' => $invoiceModel->id)));
             //echo "<pre>";print_r($postData);echo "<pre/>";exit;
       

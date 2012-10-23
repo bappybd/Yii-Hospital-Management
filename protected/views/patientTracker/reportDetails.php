@@ -11,16 +11,14 @@
 
 <?php
 $this->breadcrumbs=array(
-   'Customer Invoices'=>array('index'),
-   $model->name=>array('view','id'=>$model->id),
-   'Invoice Memo',
+	'Customer Invoices'=>array('index'),
+	$model->name=>array('view','id'=>$model->id),
+	'Invoice Memo',
 );   ?>
    
 <div class="form">
 
-<?php $actionType = isset($_REQUEST['actionType']) ? $_REQUEST['actionType'] : "" ?>
-
-<?php $form = $this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
    'id'=>'InvoiceMemoForm',
    'enableAjaxValidation'=>false,
 )); ?>
@@ -53,22 +51,17 @@ $this->breadcrumbs=array(
                $referers = DiagnosticHelper::getReferer(); 
                $list       = CHtml::listData($referers, 'id', 'value');
             ?>
-            <?php if($actionType != "printView"){ ?>
-               <?php echo $form->dropDownList($model, 'original_refby', $list, array('prompt' => '[No referer]')); ?>   
-            <?php }else{ ?>
-               <?php echo isset($invoiceModel->orginalReferer) ? $invoiceModel->orginalReferer->name : "" ?>
-            <?php } ?>
+            <?php echo $form->dropDownList($model, 'original_refby', $list, array('prompt' => '[No referer]')); ?>   
             
             </td>
       </tr>
       
       <tr>
          <td colspan=3>
-
             <?php echo $model->getAttributeLabel('refby'); ?>: 
-            
-            <?php if($actionType != "printView"){ ?>
-            <?php $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+            <?php
+               
+            $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                           'model'=> $model,
                           'attribute'=>'refby',
                           'value'=>$model->refby,
@@ -87,9 +80,6 @@ $this->breadcrumbs=array(
                           ),
                   ));
             ?>
-            <?php }else{ ?>
-               <?php echo $invoiceModel->refby ?>
-            <?php } ?>
             </td>
       </tr>
       
@@ -169,48 +159,18 @@ $this->breadcrumbs=array(
                                                                    'style' => 'width: 50px;')); ?>
                </td>
             </tr>
-         <?php }else{ ?>
-            <tr><td colspan=3 style="text-align: center;">No tests found.</td></tr>
          <?php } ?>
       </tbody>
    </table>
    <!-- END -->
-   <?php if($actionType != "printView"){ ?>
+   
    <div class="row buttons">
-      <?php echo CHtml::submitButton('Update', array('id' => 'updateButton')); ?>
-      <?php //echo CHtml::Button('Print View', array('id' => 'printButton')); ?>
-      <?php echo CHtml::link('Print View', Yii::app()->request->requestUri."?actionType=printView"); ?>
+      <?php echo CHtml::submitButton('Update and Print'); ?>
    </div>
-   <?php } else{ ?>
-   <div class="row buttons">
-      <!-- print -->
-      <?php
-           $this->widget('ext.mPrint.mPrint', array(
-                'title' => 'title',          //the title of the document. Defaults to the HTML title
-                'tooltip' => 'Print',        //tooltip message of the print icon. Defaults to 'print'
-                'text' => 'Print Results',   //text which will appear beside the print icon. Defaults to NULL
-                'element' => '#InvoiceMemoForm',        //the element to be printed.
-                'exceptions' => array(       //the element/s which will be ignored
-                    '#updateButton',
-                    '#printButton',
-                    '#print-div'
-                ),
-                'publishCss' => true,       //publish the CSS for the whole page?
-                'visible' =>true /*Yii::app()->user->checkAccess('print')*/,  //should this be visible to the current user?
-                'alt' => 'print',       //text which will appear if image can't be loaded
-                'debug' => false,            //enable the debugger to see what you will get
-                'id' => 'print-div'         //id of the print link
-            ));
-      ?>
-      <!-- end print -->   
-   </div>
-   <?php } ?>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
-
-
 
 <script type="text/javascript">
    var lastTestCloneNo = 1;

@@ -35,4 +35,20 @@ class DiagnosticHelper extends CApplicationComponent{
       
       return true;
    }
+   
+   public static function getReferer(){
+      $list     = array();
+      $criteria = new CDbCriteria();
+      $referers = OriginalRefBy::model()->findAll($criteria);
+
+      foreach($referers as $test){
+         $item             = array();
+         $item['id']       = $test->id;
+         $item['value']    = $test->name;
+         
+         $list[] = $item;
+      }
+      
+      return $list;
+   }
 }

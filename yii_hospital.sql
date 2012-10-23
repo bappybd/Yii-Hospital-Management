@@ -190,3 +190,14 @@ CREATE TABLE IF NOT EXISTS `original_ref_by` (
 
 INSERT INTO `original_ref_by` (`id`, `name`, `deg`, `hospital_name`, `mob`, `email`, `pic`) VALUES
 (1, 'Shakil Ahmed', 'M.B.B.S', 'SQUAR HOSPITAL', '017465487', 'shakil@hotpital.com', '');
+
+---
+--- Changes SQL
+---
+
+---ALTER TABLE `customer_invoice` CHANGE `refby` `refby` VARCHAR( 255 ) NOT NULL
+
+
+---ALTER TABLE `patient_tracker` ADD `status` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT '0 - Test Not Done, 1 - Test Done' AFTER `invoice_id` ,
+---ADD `report_publish` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `status` ,
+---ADD `report_delivered` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `report_publish`  

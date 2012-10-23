@@ -27,6 +27,8 @@ class DiagonisticEntryForm extends CFormModel
    
    public $tests;
    public $testsIds;
+   public $refby_name;
+   public $original_refby_name;
 
    /**
     * @return string the associated database table name
@@ -45,9 +47,9 @@ class DiagonisticEntryForm extends CFormModel
       // will receive user inputs.
       return array(
          array('name, age, sex', 'required'),
-         array('age, refby, original_refby', 'numerical', 'integerOnly'=>true),
+         array('age, original_refby', 'numerical', 'integerOnly'=>true),
          array('subtotal, less_discount, netpay, recieved, due', 'numerical'),
-         array('patient_id, name', 'length', 'max'=>255),
+         array('patient_id, refby, name', 'length', 'max'=>255),
          array('sex', 'length', 'max'=>6),
          array('mobile', 'length', 'max'=>128),
          array('create_date, update_date', 'safe'),
@@ -80,6 +82,8 @@ class DiagonisticEntryForm extends CFormModel
          'update_date'    => 'Update Date',
          'tests'          => 'Test Name',
          'testsIds'       => 'Test Id',
+         'refby_name'          => 'Ref. by',
+         'original_refby_name' => 'Original Ref. by'
       );
    }
 

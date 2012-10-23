@@ -2,20 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="language" content="en" />
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
+   <!-- blueprint CSS framework -->
+   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
+   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
+   <!--[if lt IE 8]>
+   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
+   <![endif]-->
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
+   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+   <title><?php echo CHtml::encode($this->pageTitle); ?></title>
    
    <?php 
    $cs = Yii::app()->clientScript;
@@ -41,48 +41,66 @@
    ?>
    
    <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
+   
+   <script type="text/javascript">
+   var siteUrl = "<?php echo $this->createAbsoluteUrl('/') ?>";
+   </script>
 </head>
 
 <body>
 
 <div class="container" id="page">
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
+   <div id="header">
+      <div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
+   </div><!-- header -->
 
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
-            array('label'=>'Invoice Memo List', 'url'=>array('/customerInvoice/admin')),
-				array('label'=>'Tests', 'url'=>array('/test/admin')),
-            array('label'=>'Test Category', 'url'=>array('/testCategory/admin')),
+   <div id="mainmenu">
+      <?php $this->widget('zii.widgets.CMenu',array(
+         'items'=>array(
+            array('label'=>'Home', 'url'=>array('/site/index')),
+            array('label'=>'Diagnostic', 'url'=>array('/customerInvoice/diagonisticEntryForm'), 'items'=>array(
+               array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
+               array('label'=>'All Invoice Memo', 'url'=>array('/customerInvoice/admin')),
+            )),
+            array('label'=>'Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker'), 'items'=>array(
+               array('label'=>'Active Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker')),
+               array('label'=>'ReportPublishTracker', 'url'=>array('/PatientTracker/PublishReport')),
+            )),
+            array('label'=>'Tests', 'url'=>array('/test/admin'), 'items'=>array(
+               array('label'=>'All Tests', 'url'=>array('/test/admin')),
+               array('label'=>'Test Category', 'url'=>array('/testCategory/admin')),
+            )),
+            array('label'=>'Referer', 'url'=>array('/originalRefBy/admin')),
             /*array('label'=>'Products', 'url'=>array('product/index'), 'items'=>array(
-                array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+               array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
+               array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
             )),*/
 
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
+            array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest, 'itemOptions' => array('style'=> 'float: right;')),
+            array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest, 'itemOptions' => array('style'=> 'float: right;'))
+         ),
+      )); ?>
+   </div><!-- mainmenu -->
+   <?php if(isset($this->breadcrumbs)):?>
+      <?php $this->widget('zii.widgets.CBreadcrumbs', array(
+         'links'=>$this->breadcrumbs,
+      )); ?><!-- breadcrumbs -->
+   <?php endif?>
+   
+   <!-- show flash message -->
+   <?php $this->renderPartial('/site/flash_message') ?>
+   
+   <!-- show site content -->
+   <?php echo $content; ?>
 
-	<?php echo $content; ?>
+   <div class="clear"></div>
 
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
+   <div id="footer">
+      Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
+      All Rights Reserved.<br/>
+      <?php echo Yii::powered(); ?>
+   </div><!-- footer -->
 
 </div><!-- page -->
 

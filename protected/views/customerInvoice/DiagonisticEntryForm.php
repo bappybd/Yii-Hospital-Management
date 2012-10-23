@@ -16,58 +16,8 @@
 }
 </style>
 
-<script>
- $.widget( "custom.catcomplete", $.ui.autocomplete, {
-     _renderMenu: function( ul, items ) {
-         var that = this,
-             currentCategory = "";
-         $.each( items, function( index, item ) {
-             if ( item.category != currentCategory ) {
-                 ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-                 currentCategory = item.category;
-             }
-             that._renderItemData( ul, item );
-         });
-     }
- });
- </script>
- <script>
- $(function() {
-     var data = [
-         { label: "anders", category: "" },
-         { label: "andreas", category: "" },
-         { label: "antal", category: "" },
-         { label: "annhhx10", category: "Products" },
-         { label: "annk K12", category: "Products" },
-         { label: "annttop C13", category: "Products" },
-         { label: "anders andersson", category: "People" },
-         { label: "andreas andersson", category: "People" },
-         { label: "andreas johnson", category: "People" }
-     ];
-     
-     var cache = {};
-     $( "#test_1" ).catcomplete({
-         delay: 0,
-         /*source: data*/
-         source: function( request, response ) {
-             var term = request.term;
-             if ( term in cache ) {
-                 response( cache[ term ] );
-                 return;
-             }
+<script> 
 
-             $.getJSON( "<?php echo $this->createUrl('/lookUp/getTests')?>", request, function( data, status, xhr ) {
-                 cache[ term ] = data;
-                 response( data );
-             });
-         },
-         select: function( event, ui ) {
-            var id = $(this).attr('testId');
-            $("#testId_"+id).val(ui.item.id);
-            $(this).siblings('span.testRoomSpan').html(ui.item.roomno);
-         }
-     });
- });
  </script>
 
 
@@ -76,6 +26,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
    'id'=>'diagonistic-entry-form-DiagonisticEntryForm-form',
    'enableAjaxValidation'=>false,
+   'htmlOptions'=>array('onSubmit'=>'return validateForm()')
 )); ?>
     <h1>Diagonistic Entry</h1>
    <p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -108,13 +59,56 @@
       <?php echo $form->error($model,'sex'); ?>
    </div>
    
+   <div class="row">
+      <?php echo $form->labelEx($model,'mobile'); ?>
+      <?php echo $form->textField($model,'mobile'); ?>
+      <?php echo $form->error($model,'mobile'); ?>
+   </div>
+   
+   <div class="row">
+      <?php echo $form->labelEx($model,'original_refby_name'); ?>
+      <?php 
+         $referers = DiagnosticHelper::getReferer(); 
+         $list       = CHtml::listData($referers, 'id', 'value');
+      ?>
+      <?php echo $form->dropDownList($model, 'original_refby', $list, array('prompt' => '[No referer]')); ?> 
+      <?php echo $form->error($model,'original_refby'); ?>
+   </div>
+   
+   <div class="row">
+      <?php echo $form->labelEx($model,'refby'); ?>
+      <?php
+      $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                    'model'=> $model,
+                    'attribute'=>'refby',
+                    'value'=>$model->refby,
+                    'source'=>$this->createUrl('/lookUp/getReferer'),// <- path to controller which returns dynamic data
+                    // additional javascript options for the autocomplete plugin
+                    'options'=>array(
+                       'minLength'=>'1', // min chars to start search
+                       'select'=>'js:function(event, ui) { 
+                          $("#DiagonisticEntryForm_refby").val(ui.item.id);
+                        }'
+                    ),
+                    'htmlOptions'=>array(
+                       'id'=>'refby',
+                       'rel'=>'val',
+                       'style' => 'width: 315px'
+                    ),
+            ));
+      ?>
+      <?php //echo $form->error($model,'refby'); ?>
+   </div>
+   
+   
    
    <span id="testCloneSpan">
       <div class="row" id="cloneTest" testNo="1">
          <?php echo $form->labelEx($model,'tests'); ?>
          <?php echo $form->textField($model,'tests[]', array('id' => 'test_1', 'class' => 'testAutoComplete', 'testId' => '1')); ?>
-         <?php echo $form->hiddenField($model,'testsIds[]', array('id' => 'testId_1', 'class' => 'testHiddenField')); ?>
+         <?php echo $form->textField($model,'testsIds[]', array('id' => 'testId_1', 'class' => 'testHiddenField')); ?>
          &nbsp;&nbsp;<strong>Room NO:</strong> <span id="roomNoSpan_1" class="testRoomSpan"></span>
+         &nbsp;&nbsp;<a href="javascript: void(0)" onClick="removeTest(this)" id="roomRemoveButton_1" class="testRoomRemoveSpan" style="display:none">Remove</a>
       </div>
    </span>
    
@@ -133,22 +127,77 @@
 <script type="text/javascript">
    var lastTestCloneNo = 1;
    var cache = {};
+   
+   $.widget( "custom.catcomplete", $.ui.autocomplete, {
+        _renderMenu: function( ul, items ) {
+            var that = this,
+                currentCategory = "";
+            $.each( items, function( index, item ) {
+                if ( item.category != currentCategory ) {
+                    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                    currentCategory = item.category;
+                }
+                that._renderItemData( ul, item );
+            });
+        }
+    });
+
+   function bindCatComplete(thisObject)
+   {
+      $(thisObject).catcomplete({
+         delay: 0,
+         /*source: data*/
+         source: function( request, response ) {
+             var term = request.term;
+             if ( term in cache ) {
+                 response( cache[ term ] );
+                 return;
+             }
+
+             $.getJSON( "<?php echo $this->createUrl('/lookUp/getTests')?>", request, function( data, status, xhr ) {
+                 cache[ term ] = data;
+                 response( data );
+             });
+         },
+         select: function( event, ui ) {
+            var id = $(this).attr('testId');
+            $("#testId_"+id).val(ui.item.id);
+            $(this).siblings('span.testRoomSpan').html(ui.item.roomno);
+         }
+     });
+   }
+
+    $(function() {
+        bindCatComplete($("#test_1"));
+    });
+   
+   
    $("#addNewTestButton").live('click',function(){
       var testCloneDiv = $("#cloneTest").clone();
       var newTestCloneNo = lastTestCloneNo + 1;
       
-      var newLabel    = $(testCloneDiv).children('label');
-      var newInput    = $(testCloneDiv).children('input.testAutoComplete');
-      var newInputId  = $(testCloneDiv).children('input.testHiddenField');
-      var newRoomSpan = $(testCloneDiv).children('span.testRoomSpan');
+      var newLabel         = $(testCloneDiv).children('label');
+      var newInput         = $(testCloneDiv).children('input.testAutoComplete');
+      var newInputId       = $(testCloneDiv).children('input.testHiddenField');
+      var newRoomSpan      = $(testCloneDiv).children('span.testRoomSpan');
+      var newRoomDeleteBtn = $(testCloneDiv).children('a.testRoomRemoveSpan');
       newRoomSpan.html('');
       newRoomSpan.attr('id', 'roomNoSpan_'+newTestCloneNo);
       
+      //main fields
       newInput.val('');
       newInput.attr('id', 'test_'+newTestCloneNo);
       newInput.attr('testId', newTestCloneNo);
       newLabel.html('Test Name '+newTestCloneNo);
-            
+      //$("#test_"+newTestCloneNo).catcomplete(catcompleteSettings);
+     
+      //hidden fields
+      newInputId.val('');
+      newInputId.attr('id', 'testId_'+newTestCloneNo);
+
+      testCloneDiv.attr('testNo', newTestCloneNo);
+      newRoomDeleteBtn.show();
+      
       newInput.catcomplete({
          delay: 0,
          /*source: data*/
@@ -168,5 +217,39 @@
       
       $("#testCloneSpan").append(testCloneDiv);
       lastTestCloneNo = newTestCloneNo;
+      
+      //bind the autocomplete test
+      bindCatComplete($("#test_"+newTestCloneNo));
    });
+   
+   function removeTest(testObject)
+   {  
+      var parent = $(testObject).parent();
+      
+      if(parent.attr('testNo')!=1)
+      {   
+         parent.remove();
+      }
+   }
+   
+   function validateForm()
+   {
+      var hasTest = false;
+      
+      $(".testHiddenField").each(function(){
+         var testId = $(this).val();console.log($(this));
+         if(testId.length > 0)
+         {
+            hasTest = true;
+            return true;
+         }
+         else
+         {
+            alert('Please add atleast one Test');
+            $(".testAutoComplete:first").focus();
+         }
+      });
+
+      return false; 
+   }   
 </script>
