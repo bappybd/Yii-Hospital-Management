@@ -138,7 +138,7 @@ class TestController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Test('search');
+		$model = new Test('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Test']))
 			$model->attributes=$_GET['Test'];

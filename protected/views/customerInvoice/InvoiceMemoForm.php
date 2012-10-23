@@ -9,6 +9,13 @@
    div.form .fixedWidth{display: inline;width: 200px}
 </style>
 
+<?php
+$this->breadcrumbs=array(
+	'Customer Invoices'=>array('index'),
+	$model->name=>array('view','id'=>$model->id),
+	'Invoice Memo',
+);   ?>
+   
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -23,21 +30,22 @@
       <tr>
          <td colspan=2>
             <div class="fixedWidth"><?php echo $form->labelEx($model,'patient_id', array('class'=>'invoiceMemoLabel')); ?>:</div> 
-            <?php echo $form->textField($model,'patient_id'); ?>
+            <?php echo $model->patient_id; ?>
+            <?php //echo $form->textField($model,'patient_id'); ?>
          </td>
          <td>Date: <?php echo date('Y:m:d h:i:s') ?></td>
       </tr>
       <tr>
-         <td colspan=3><?php echo $model->getAttributeLabel('name'); ?>: <?php echo $form->textField($model, 'name', array('style' => 'width: 315px')); ?></td>
+         <td colspan=3><?php echo $model->getAttributeLabel('name'); ?>: <?php echo $model->name; ?> <?php //echo $form->textField($model, 'name', array('style' => 'width: 315px')); ?></td>
       </tr>
       <tr>
-         <td><?php echo $model->getAttributeLabel('age'); ?>: <?php echo $form->textField($model, 'age'); ?></td>
-         <td><?php echo $model->getAttributeLabel('sex'); ?>: <?php echo $form->textField($model, 'sex'); ?></td>
-         <td><?php echo $model->getAttributeLabel('mobile'); ?>: <?php echo $form->textField($model, 'mobile'); ?></td>
+         <td><?php echo $model->getAttributeLabel('age'); ?>: <?php echo $model->age; ?> <?php //echo $form->textField($model, 'age'); ?></td>
+         <td><?php echo $model->getAttributeLabel('sex'); ?>: <?php echo $model->sex; ?> <?php //echo $form->textField($model, 'sex'); ?></td>
+         <td><?php echo $model->getAttributeLabel('mobile'); ?>: <?php echo $model->mobile; ?> <?php //echo $form->textField($model, 'mobile'); ?></td>
       </tr>
       <tr>
          <td colspan=3>
-            <?php echo $model->getAttributeLabel('refby_name'); ?>: <?php echo isset($invoiceModel->referer) ? $invoiceModel->referer->name : ""; ?>
+            <?php echo $model->getAttributeLabel('refby_name'); ?>: 
             <?php
             $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                           'name'=>'refby',
@@ -62,7 +70,7 @@
       </tr>
       <tr>
          <td colspan=3>
-            <?php echo $model->getAttributeLabel('original_refby_name'); ?>: <?php echo isset($invoiceModel->orginalReferer) ? $invoiceModel->orginalReferer->name : ""; ?>
+
             <?php
             $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                           'name'=>'original_refby',
@@ -91,7 +99,7 @@
    </table>
    
    <!-- Patient Tracker list table -->
-   <table>
+   <table id="calculateInvoice">
       <thead>
          <tr>
             <th width="15%">SL NO.</th>
@@ -119,27 +127,47 @@
             <tr>
                <td></td>
                <td style="text-align: center;"><strong>Sub Total</strong></td>
-               <td><strong><?php echo $subTotal ?></strong></td>
+               <td>
+                  <span id="subTotalSpan"><?php echo $subTotal ?></span>
+                  <?php echo $form->hiddenField($model, 'subtotal', array('value' => $subTotal, 
+                                                                        'style' => 'width: 50px;')); ?>
+               </td>
             </tr>
             <tr>
                <td></td>
                <td style="text-align: center;"><strong>Less Discount</strong></td>
-               <td><strong><?php echo $lessDiscount ?></strong></td>
+               <td>
+                  <?php echo $form->textField($model, 'less_discount', array('value' => $lessDiscount,
+                                                                             'id'    => 'lessDiscountSpan',
+                                                                             'style' => 'width: 50px;')); ?>
+               </td>
             </tr>
             <tr>
                <td></td>
                <td style="text-align: center;"><strong>Net Payable</strong></td>
-               <td><strong><?php echo $netPayable ?></strong></td>
+               <td>
+                  <span id="netPayableSpan"><?php echo $netPayable ?></span>
+                  <?php echo $form->hiddenField($model, 'netpay', array('value' => $netPayable, 
+                                                                      'style' => 'width: 50px;')); ?>
+               </td>
             </tr>
             <tr>
                <td></td>
                <td style="text-align: center;"><strong>Amount Receive</strong></td>
-               <td><strong><?php echo $amountRecieve ?></strong></td>
+               <td>
+                  <?php echo $form->textField($model, 'recieved', array('value' => $amountRecieve,
+                                                                   'id'    => 'amountRecieveSpan',
+                                                                   'style' => 'width: 50px;')); ?>
+               </td>
             </tr>
             <tr>
                <td></td>
                <td style="text-align: center;"><strong>Due Amount</strong></td>
-               <td><strong><?php echo $dueAmount ?></strong></td>
+               <td>
+                  <span id="dueAmountSpan"><?php echo $dueAmount ?></span>
+                  <?php echo $form->hiddenField($model, 'due', array('value' => $dueAmount, 
+                                                                   'style' => 'width: 50px;')); ?>
+               </td>
             </tr>
          <?php } ?>
       </tbody>
@@ -190,4 +218,26 @@
       $("#testCloneSpan").append(testCloneDiv);
       lastTestCloneNo = newTestCloneNo;
    });
+   
+   //autocalculate total
+   var subTotal = parseInt($("#subTotalSpan").html());
+
+   $("#calculateInvoice input#lessDiscountSpan").bind("blur", function(){
+      var lessDiscount = $(this).val();
+      var netPayable =  (subTotal - lessDiscount);
+      
+      $("#netPayableSpan").html(netPayable);
+      $("#InvoiceMemoForm_netpay").val(netPayable);
+      
+      $("#calculateInvoice input#amountRecieveSpan").trigger("blur");
+   });
+   
+   $("#calculateInvoice input#amountRecieveSpan").bind("blur", function(){
+      var amountRecieve = $(this).val();
+      var netPayable    =  parseInt($("#netPayableSpan").html());
+      
+      var due = (netPayable - amountRecieve);
+      $("#dueAmountSpan").html(due);
+      $("#InvoiceMemoForm_due").val(due);
+   })
 </script>

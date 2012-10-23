@@ -7,13 +7,6 @@
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `yii_hospital`
@@ -93,6 +86,9 @@ CREATE TABLE IF NOT EXISTS `test` (
 -- Dumping data for table `test`
 --
 
+INSERT INTO `test` (`id`, `test_name`, `category_id`, `refvalue`, `test_amount`, `test_room`) VALUES
+(1, 'Blood group test', 2, 0, 150, '101');
+
 
 -- --------------------------------------------------------
 
@@ -113,7 +109,41 @@ CREATE TABLE IF NOT EXISTS `test_category` (
 
 INSERT INTO `test_category` (`id`, `category_name`, `parent_id`) VALUES
 (1, 'Blood', 0),
-(2, 'Blood Group Test', 1);
+(2, 'group test', 1),
+(3, 'MRI', 0),
+(4, 'CT SCAN', 0),
+(5, 'PLAIN X-RAY (Digital/Computed)', 0),
+(6, 'MAMMOGRAM', 0),
+(7, 'CONTRAST X-RAYS', 0),
+(8, 'PLAIN X-RAYS (Conventional)', 0),
+(9, 'OPG - Dental X-ray', 0),
+(10, 'BMD (Bone Mineral Density)', 0),
+(11, 'VASCULAR STUDY', 0),
+(12, 'CARDIAC IMAGING', 0),
+(13, 'SPECIAL PROCEDURES', 0),
+(14, 'ULTRASOUND IMAGING', 0),
+(15, 'OTHERS', 0),
+(16, 'HAEMATOLOGY', 0),
+(17, 'SUGAR PROFILE', 0),
+(18, 'KIDNEY PROFILE', 0),
+(19, 'COMPLEMENTS', 0),
+(20, 'ELECTROLYTES-MINERALS', 0),
+(21, 'LIPID PROFILE', 0),
+(22, 'LIVER FUNCTION', 0),
+(23, 'CARDIAC ENZYMES', 0),
+(24, 'OTHER ENZYMES', 0),
+(25, 'TUMOUR MARKER', 0),
+(26, 'SEROLOGY', 0),
+(27, 'MYCOBAC-TB Complex', 0),
+(28, 'HORMONE ASSAYS', 0),
+(29, 'HEPATITIES PANNEL', 0),
+(30, 'IMMUNOGLOBULINS', 0),
+(31, 'URINE EXAM', 0),
+(32, 'DRUG ABUSE-TOXICITY', 0),
+(33, 'STOOL EXAM', 0),
+(34, '24 Hr. URINE for', 0),
+(35, 'MICROBIOLOGY', 0),
+(36, 'SPECIAL TESTS', 0);
 
 -- --------------------------------------------------------
 
