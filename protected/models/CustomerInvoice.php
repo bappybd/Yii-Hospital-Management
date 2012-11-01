@@ -57,7 +57,7 @@ class CustomerInvoice extends CActiveRecord
          array('create_date, update_date', 'safe'),
          // The following rule is used by search().
          // Please remove those attributes that should not be searched.
-         array('id, patient_id, name, age, sex, mobile, refby, original_refby, subtotal, less_discount, netpay, recieved, due, create_date, update_date', 'safe', 'on'=>'search'),
+         array('id, patient_id, name, age, sex, mobile, refby, original_refby, subtotal, less_discount, netpay, recieved, due, total_tests, create_date, update_date', 'safe', 'on'=>'search'),
       );
    }
 
@@ -69,8 +69,8 @@ class CustomerInvoice extends CActiveRecord
       // NOTE: you may need to adjust the relation name and the related
       // class name for the relations automatically generated below.
       return array(
-         'patientTracker'=> array(self::HAS_MANY,  'PatientTracker', '', 'on' => 't.patient_id = patientTracker.patient_id'),
-         'referer' => array(self::BELONGS_TO,  'OriginalRefBy', 'refby'),
+         'patientTracker' => array(self::HAS_MANY,  'PatientTracker', '', 'on' => 't.patient_id = patientTracker.patient_id'),
+         'referer'        => array(self::BELONGS_TO,  'OriginalRefBy', 'refby'),
          'orginalReferer' => array(self::BELONGS_TO,  'OriginalRefBy', 'original_refby'),
       );
    }
@@ -94,6 +94,7 @@ class CustomerInvoice extends CActiveRecord
          'netpay' => 'Netpay',
          'recieved' => 'Recieved',
          'due' => 'Due',
+         'total_tests' => 'Total Tests',
          'create_date' => 'Create Date',
          'update_date' => 'Update Date',
       );

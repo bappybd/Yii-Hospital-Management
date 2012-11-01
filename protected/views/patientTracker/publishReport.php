@@ -59,6 +59,7 @@ function loadTests(){
      data: {
         patientId  : patientID,
         testroomNo : roomNo,
+        type       : 'publish'
      },
      success: function(response){
         $("#testSpan").html(response);

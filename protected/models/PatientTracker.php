@@ -88,7 +88,18 @@ class PatientTracker extends CActiveRecord
 		$criteria->compare('test_id',$this->test_id);
 		$criteria->compare('testroom_no',$this->testroom_no);
 		$criteria->compare('invoice_id',$this->invoice_id);
-
+      
+      //add custom conditions
+      $patientId = isset($_REQUEST['patient_id']) ? $_REQUEST['patient_id'] : "";
+      if(!empty($patientId)){
+         $criteria->condition = "patient_id='$patientId'";
+      }
+      
+      //with relation 
+      $criteria->with = array('test', 'test.testCategory');
+      
+      
+      
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

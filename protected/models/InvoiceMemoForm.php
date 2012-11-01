@@ -21,6 +21,7 @@ class InvoiceMemoForm extends CFormModel
    public $less_discount;
    public $recieved;
    public $due;
+   public $total_tests;
    public $create_date;
    public $update_date;
    //end not required

@@ -5,6 +5,6 @@ return array(
    'connectionString' => 'mysql:host=localhost;dbname=yii_hospital',
    'emulatePrepare' => true,
    'username' => 'root',
-   'password' => '123456',
+   'password' => '',
    'charset' => 'utf8',
 );

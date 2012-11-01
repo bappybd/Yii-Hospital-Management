@@ -62,6 +62,7 @@
             array('label'=>'Diagnostic', 'url'=>array('/customerInvoice/diagonisticEntryForm'), 'items'=>array(
                array('label'=>'Diagnostic Form', 'url'=>array('/customerInvoice/diagonisticEntryForm')),
                array('label'=>'All Invoice Memo', 'url'=>array('/customerInvoice/admin')),
+               array('label'=>'Invoice Tests List', 'url'=>array('/customerInvoice/invoiceTestsList')),
             )),
             array('label'=>'Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker'), 'items'=>array(
                array('label'=>'Active Patient Tracker', 'url'=>array('/PatientTracker/ActivePatientTracker')),
